@@ -1,3 +1,5 @@
-# ignore xml and properties
+# ignore xml
 *.xml
+
+# ignore properties
 *.properties
