@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linkface.mapper.RecipeGradeMapper">
+		
+<insert id="insert">
+		INSERT
+		INTO recipe_grade
+			(
+				recipe_id,
+				user_key,
+				grade
+			)
+		VALUE
+			(
+				#{RECIPEID},
+				#{userKey},
+				#{grade}
+			)
+	</insert>
+
+	<update id="update">
+		UPDATE
+			recipe_grade
+		SET
+			grade = #{grade}
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+			AND
+			user_key = ${userKey}
+	</update>
+		
+	<delete id="delete">
+		delete
+		FROM
+			recipe_grade
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+			AND
+			user_key = ${userKey}
+	</delete>
+	
+	<select id="selectOneFromRecipe" resultType="com.linkface.entity.RecipeGrade">
+		SELECT
+			*
+		FROM
+			recipe_grade
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+			AND
+			user_key = ${userKey}
+	</select>
+	<select id="selectAllFromRecipe" resultType="com.linkface.entity.RecipeGrade">
+		SELECT
+			*
+		FROM
+			recipe_grade
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</select>
+	
+</mapper>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linkface.mapper.FoodNameMapper">
+		
+	<select id="readAll" resultType="com.linkface.entity.FoodName">
+		SELECT
+			*
+		FROM
+			foodname
+	</select>
+	
+	<select id="readList" resultType="com.linkface.entity.FoodName">
+		SELECT
+			*
+		FROM
+			foodname
+		WHERE
+			RECIPE_NM_KO like concat('%', #{RECIPENMKO}, '%')
+	</select>
+	<select id="readOne" resultType="com.linkface.entity.FoodName">
+		SELECT
+			*
+		FROM
+			foodname
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</select>
+	<select id="readUserRecipe" resultType="com.linkface.entity.FoodName">
+		SELECT
+			*
+		FROM
+			foodname
+		WHERE
+			user_key = #{userKey}
+	</select>
+	<update id="updateViewCount">
+		UPDATE
+			foodname
+		SET
+			views_count = views_count + 1,
+			today_views_count = today_views_count + 1
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</update>
+	<update id="updateGrade">
+		UPDATE
+			foodname
+		SET
+			grade_avg = #{GRADEAVG},
+			grade_count = #{GRADECOUNT}
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</update>
+	<select id="readGroupByCategoryOrderByDay" resultType="hashmap">
+		SELECT
+			ty_nm as category,
+		<choose>
+			 <when test="day.equals('today')">
+		 	  	sum(today_views_count) as count
+		 	 </when>
+			 <otherwise>
+				sum(views_count) as count
+			 </otherwise>    
+		 </choose>
+		FROM
+			foodname
+		group BY 
+			ty_nm
+		<choose>
+			 <when test="day.equals('today')">
+		 	  	ORDER BY
+					sum(today_views_count) 
+		 	 </when>
+			 <otherwise>
+				ORDER BY
+					sum(views_count) 
+			 </otherwise>    
+		 </choose>
+		DESC
+		LIMIT 5
+	</select>
+	<select id="readListTopFiveUser" resultType="hashmap">
+		SELECT 
+			user_key as userKey,
+			count(*) as count
+		 FROM
+		  	<choose>
+				 <when test="day.equals('today')">
+			 	  	<![CDATA[
+				 	  	(select * from foodname where DATEDIFF(now(),create_date) < 1)
+			 	  	]]>
+			 	 </when>
+			 	 <when test="day.equals('month')">
+			 	 	<![CDATA[
+				 	  	(select * from foodname where DATEDIFF(now(),create_date) < 30)
+			 	  	]]>
+			 	 </when>
+				 <otherwise>
+				 	<![CDATA[
+				 	  	(select * from foodname where DATEDIFF(now(),create_date) < 10000)
+			 	  	]]>
+				 </otherwise>    
+			 </choose>
+			 dayFilterSubQuery
+		 GROUP BY
+		 	user_key
+		 ORDER BY
+		 	count(*)
+		 DESC
+		 LIMIT 5
+		 </select>
+		 
+	<delete id="delete">
+		DELETE FROM
+			foodname
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</delete>
+</mapper>

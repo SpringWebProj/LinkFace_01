@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linkface.mapper.UserStatusMapper">
+	
+	<!-- 추가 -->
+	<insert id="insert">
+		INSERT
+		INTO userstatus
+			(
+				user_key
+			)
+		VALUE
+			(
+				#{userKey}
+			)
+	</insert>
+	
+	<select id="select" resultType="com.linkface.entity.UserStatus">
+		SELECT 
+			*
+		FROM 
+			userstatus
+		WHERE
+			user_key = #{userKey}
+	</select>
+	
+	<update id="updateToken">
+		UPDATE
+			userstatus
+		SET
+			auth_token = replace(uuid(),'-',''),
+            token_create_date = now()
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updateEmailAuth">
+		UPDATE
+			userstatus
+		SET
+			email_auth = true
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updateRole">
+		UPDATE
+			userstatus
+		SET
+			role = #{role}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updateLoginFailCount">
+		UPDATE
+			userstatus
+		SET
+			login_fail_count = #{loginFailCount}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updateIdNonExpired">
+		UPDATE
+			userstatus
+		SET
+			id_non_expired = #{idNonExpired}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	
+	<update id="updateEnabled">
+		UPDATE
+			userstatus
+		SET
+			enabled = #{enabled}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	
+	<update id="updateSanctionsDate">
+		UPDATE
+			userstatus
+		SET
+		<choose>
+			 <when test="day == 0">
+		 	  	 sanctions_date = DATE_ADD(null, INTERVAL #{day} day)
+		 	 </when>
+			 <otherwise>
+				 sanctions_date = DATE_ADD(now(), INTERVAL #{day} day)
+			 </otherwise>    
+		 </choose>
+		WHERE
+			user_key = #{userKey}
+	</update>
+
+	<select id="readAllUser" resultType="com.linkface.entity.UserStatus">
+		SELECT 
+			*
+		FROM 
+			userstatus
+	</select>
+	<delete id="delete">
+		DELETE FROM 
+			userstatus
+		WHERE 
+			user_key = #{userKey};
+	</delete>
+	<update id="updatePasswordNonExpired">
+		UPDATE
+			userstatus
+		SET
+			password_non_expired = #{passwordNonExpired}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updateLastLoginDate">
+		UPDATE
+			userstatus
+		SET
+			last_login_date = now()
+		WHERE
+			user_key = #{userKey}
+	</update>
+</mapper>

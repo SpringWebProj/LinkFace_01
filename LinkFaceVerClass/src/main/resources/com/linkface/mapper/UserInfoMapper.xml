@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linkface.mapper.UserInfoMapper">
+	
+	<!-- 추가 -->
+	<insert id="insert">
+		INSERT
+		INTO userinfo
+			(
+				user_id,
+				user_password,
+				user_email,
+				user_name
+			)
+		VALUE
+			(
+				#{userId},
+				#{userPassword},
+				#{userEmail},
+				#{userName}
+			)
+	</insert>
+	
+	<select id="select" resultType="com.linkface.entity.UserInfo">
+		SELECT 
+			*
+		FROM 
+			userinfo
+		WHERE
+			user_key = #{userKey}
+	</select>
+	<select id="readId" resultType="com.linkface.entity.UserInfo">
+		SELECT 
+			*
+		FROM 
+			userinfo
+		WHERE
+			user_id = #{userId}
+	</select>
+	<select id="readEmail" resultType="com.linkface.entity.UserInfo">
+		SELECT 
+			*
+		FROM 
+			userinfo
+		WHERE
+			user_email = #{userEmail}
+	</select>
+	<select id="readAllUserId" resultType="String">
+		SELECT 
+			user_id 
+		FROM
+			userinfo
+	</select>
+	<update id="updateEmail">
+		UPDATE
+			userinfo
+		SET
+			user_email = #{userEmail}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updateName">
+		UPDATE
+			userinfo
+		SET
+			user_name = #{userName}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="updatePassword">
+		UPDATE
+			userinfo
+		SET
+			user_password = #{userPassword}
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<update id="changeUpdateDate">
+		UPDATE
+			userinfo
+		SET
+			update_date = now()
+		WHERE
+			user_key = #{userKey}
+	</update>
+	<delete id="delete">
+		DELETE FROM 
+			userinfo
+		WHERE 
+			user_key = #{userKey};
+	</delete>
+	
+</mapper>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.linkface.mapper.FoodIngredientsMapper">
+		
+	<select id="readAll" resultType="com.linkface.entity.FoodIngredients">
+		SELECT
+			*
+		FROM
+			foodingredients
+	</select>
+	
+	<select id="readOne" resultType="com.linkface.entity.FoodIngredients">
+		SELECT
+			*
+		FROM
+			foodingredients
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</select>
+	
+	<delete id="delete">
+		DELETE FROM
+			foodingredients
+		WHERE
+			RECIPE_ID = #{RECIPEID}
+	</delete>
+	
+</mapper>
